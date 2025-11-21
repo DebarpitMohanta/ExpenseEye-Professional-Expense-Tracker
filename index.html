@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ExpenseEye — Professional Expense Tracker</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --panel:#ffffff;--muted:#6b7280;--accent:#3b82f6;--accent-2:#7c3aed;
+      --radius:14px;--card-shadow:0 12px 40px rgba(8,15,40,0.12);--soft-shadow:0 8px 30px rgba(2,6,23,0.08);
+      --max:1120px;font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+    }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{
+      margin:0;padding:36px 16px;background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(59,130,246,0.10), transparent 10%),
+        radial-gradient(1000px 700px at 90% 90%, rgba(124,58,237,0.08), transparent 12%),
+        linear-gradient(180deg,#f6f8fb 0%, #ffffff 100%);
+      color:#021124;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+      line-height:1.35;
+    }
+
+    .wrap{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:start}
+    header{grid-column:1 / -1;display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:white;font-weight:800;font-size:20px;box-shadow:var(--soft-shadow)}
+    h1{margin:0;font-size:20px}
+    .sub{color:var(--muted);font-size:13px}
+
+    .card{background:var(--panel);border-radius:var(--radius);padding:18px;box-shadow:var(--card-shadow);border:1px solid rgba(12,20,40,0.03)}
+    @media (max-width:980px){.wrap{grid-template-columns:1fr} header{flex-direction:column;align-items:flex-start;gap:10px}}
+
+    main>section{display:flex;flex-direction:column;gap:16px}
+    .card h2,.card h3,.card h4{margin:0 0 10px 0;color:#06102a}
+    p.muted{margin:0;color:var(--muted);font-size:13px}
+
+    form{display:grid;gap:10px}
+    label{display:block;font-size:13px;color:#0b1630;margin-bottom:6px}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    input[type="text"],input[type="password"],input[type="email"],select,textarea,input[type="date"],input[type="number"]{
+      width:100%;padding:12px 14px;border-radius:10px;border:1px solid #e6eef8;background:#fbfdff;font-size:14px;outline:none;transition:all .12s ease;
+    }
+    input:focus, textarea:focus, select:focus{border-color: rgba(59,130,246,0.45);box-shadow:0 10px 30px rgba(59,130,246,0.06)}
+    .actions{display:flex;gap:10px;align-items:center}
+    .btn{appearance:none;border:0;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;box-shadow:0 8px 28px rgba(59,130,246,0.16)}
+    .btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(59,130,246,0.12);box-shadow:none}
+    .btn.secondary{background:#f3f6ff;color:var(--accent);border:1px solid rgba(15,98,254,0.06);font-weight:600}
+
+    .widgets{display:flex;gap:12px}
+    .widget{flex:1;padding:14px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfdff);border:1px solid rgba(10,20,60,0.03)}
+    .k{font-size:20px;font-weight:800}.l{font-size:13px;color:var(--muted)}
+
+    table{width:100%;border-collapse:collapse;margin-top:6px;font-size:14px}
+    thead th{text-align:left;padding:10px 8px;color:var(--muted);font-weight:600;font-size:13px;border-bottom:1px solid rgba(10,20,50,0.04)}
+    tbody td{padding:12px 8px;border-bottom:1px solid rgba(10,20,50,0.03)}
+    .right{text-align:right}.empty{color:var(--muted);padding:20px;text-align:center}
+
+    aside{display:flex;flex-direction:column;gap:12px}
+    .stat-list{display:flex;flex-direction:column;gap:8px}
+    .stat-item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;background:linear-gradient(180deg,#fbfdff,#ffffff);border:1px solid rgba(10,20,50,0.03)}
+    .small{font-size:13px;color:var(--muted)}
+    ol.setup{padding-left:18px;margin:8px 0 0 0;color:var(--muted);font-size:13px}
+    code{background:#f3f6ff;padding:6px 8px;border-radius:6px;font-size:13px;color:var(--accent)}
+
+    footer{grid-column:1 / -1;text-align:center;color:var(--muted);font-size:13px;margin-top:8px}
+    .tag{display:inline-block;padding:6px 10px;border-radius:999px;background:#f3f6ff;color:var(--accent);font-weight:700;font-size:12px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true">EE</div>
+        <div>
+          <h1>ExpenseEye</h1>
+          <div class="sub">Professional Expense Tracker</div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <div class="tag" title="Demo mode">Demo</div>
+        <div class="cred">Demo credentials: <strong>demo / password</strong></div>
+      </div>
+    </header>
+
+    <!-- LEFT: main -->
+    <main>
+      <section>
+        <div class="card" aria-labelledby="login-title">
+          <h2 id="login-title">Quick Login</h2>
+          <p class="muted">Use demo credentials or register a new user. Forms post to <code>/login</code> and <code>/register</code>.</p>
+
+          <!-- Login: plain POST to backend -->
+          <form id="loginForm" method="POST" action="/login" autocomplete="on">
+            <label for="uname">Username</label>
+            <input id="uname" name="username" type="text" placeholder="username" required />
+
+            <label for="pwd">Password</label>
+            <input id="pwd" name="password" type="password" placeholder="password" required />
+
+            <div class="actions" style="margin-top:6px">
+              <button class="btn" type="submit">Login</button>
+              <button class="btn ghost" type="button" onclick="fillDemo()">Fill Demo</button>
+              <button class="btn secondary" type="button" onclick="alertInfo()">How it works</button>
+            </div>
+            <div class="small" style="margin-top:8px">Tip: For real deployment enable HTTPS and secure cookies.</div>
+          </form>
+
+          <hr style="border:0;height:1px;background:linear-gradient(90deg,transparent,#eef4ff,transparent);margin:16px 0;border-radius:4px" />
+
+          <!-- Register -->
+          <form id="registerForm" method="POST" action="/register" autocomplete="on">
+            <h3 style="margin-top:0">Register</h3>
+
+            <div class="form-row">
+              <div>
+                <label for="ruser">New username</label>
+                <input id="ruser" name="username" type="text" placeholder="choose username" required />
+              </div>
+              <div>
+                <label for="remail">Email</label>
+                <input id="remail" name="email" type="email" placeholder="you@example.com" required />
+              </div>
+            </div>
+
+            <label for="rpass">Password</label>
+            <input id="rpass" name="password" type="password" placeholder="choose password" required />
+
+            <div style="display:flex;justify-content:flex-end;margin-top:6px">
+              <button class="btn" type="submit">Create Account</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Add Expense card -->
+        <div class="card" aria-labelledby="add-title">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <h3 id="add-title" style="margin:0">Add Expense</h3>
+            <div class="small muted">Quick add — updates dashboard instantly</div>
+          </div>
+
+          <form id="addForm" onsubmit="submitAddExpense(event);">
+            <div class="form-row">
+              <div>
+                <label for="amt">Amount (₹)</label>
+                <input id="amt" name="amount" type="number" step="0.01" placeholder="100.00" required />
+              </div>
+              <div>
+                <label for="date">Date</label>
+                <input id="date" name="date" type="date" required />
+              </div>
+            </div>
+
+            <div style="display:flex;gap:10px;margin-top:8px">
+              <div style="flex:1">
+                <label for="cat">Category</label>
+                <select id="cat" name="category_id" required>
+                  <option value="">— select —</option>
+                  <option value="1">Food</option>
+                  <option value="2">Travel</option>
+                  <option value="3">Bills</option>
+                  <option value="4">Shopping</option>
+                  <option value="5">Misc</option>
+                </select>
+              </div>
+              <div style="flex:2">
+                <label for="note">Note</label>
+                <input id="note" name="note" type="text" placeholder="Lunch, taxi, etc." />
+              </div>
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+              <div class="tiny muted">All fields required except note.</div>
+              <div>
+                <button type="submit" class="btn">Add Expense</button>
+                <a class="btn ghost" href="/export_csv" style="text-decoration:none;margin-left:8px">Export CSV</a>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="card" aria-labelledby="recent-title">
+          <h3 id="recent-title">Recent Transactions</h3>
+          <div style="overflow:auto">
+            <table aria-label="Recent transactions">
+              <thead>
+                <tr><th>Date</th><th>Category</th><th>Note</th><th class="right">Amount</th></tr>
+              </thead>
+              <tbody id="txnBody">
+                <!-- fallback static rows -->
+                <tr><td>2025-11-18</td><td>Food</td><td>Lunch at cafe</td><td class="right">₹250.00</td></tr>
+                <tr><td>2025-11-10</td><td>Bills</td><td>Electricity bill</td><td class="right">₹1,200.50</td></tr>
+                <tr><td>2025-10-30</td><td>Shopping</td><td>Shoes</td><td class="right">₹499.99</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- RIGHT: Sidebar -->
+    <aside>
+      <div class="card" aria-labelledby="overview-title">
+        <h4 id="overview-title">Overview</h4>
+
+        <div class="widgets" style="margin-bottom:12px">
+          <div class="widget" role="region" aria-label="This month total">
+            <div class="k">₹<span id="monthlyTotal">1,950.49</span></div>
+            <div class="l">This month</div>
+          </div>
+          <div class="widget" role="region" aria-label="Top categories count">
+            <div class="k" id="topCount">3</div>
+            <div class="l">Top categories</div>
+          </div>
+        </div>
+
+        <h4 style="margin:8px 0 8px 0">Top categories</h4>
+        <div class="stat-list" id="topCats">
+          <div class="stat-item"><div>Food</div><div class="muted">₹250</div></div>
+          <div class="stat-item"><div>Bills</div><div class="muted">₹1,200.50</div></div>
+          <div class="stat-item"><div>Shopping</div><div class="muted">₹499.99</div></div>
+        </div>
+
+        <hr style="border:0;height:1px;background:linear-gradient(90deg,transparent,#eef4ff,transparent);margin:12px 0;border-radius:4px" />
+
+        <div class="tiny">To connect backend:</div>
+        <ol class="setup">
+          <li>Run the WSGI server: <code>python app.py</code></li>
+          <li>Open: <code>http://127.0.0.1:8000/</code></li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h4>Quick tips (for interviews)</h4>
+        <ul style="margin:0;padding-left:18px;color:var(--muted);font-size:13px">
+          <li>Use parameterized SQL to prevent injection</li>
+          <li>Mention salted hashing (bcrypt/argon2) for production</li>
+          <li>Index on <code>user_id, date</code> for fast queries</li>
+        </ul>
+      </div>
+    </aside>
+
+    <footer>Built for interview demo • Vanilla Python WSGI • SQLite • Responsive UI</footer>
+  </div>
+
+  <script>
+    // Screenshot path (use this for README if you want)
+    // Screenshot file: /mnt/data/3d15bdb2-91cf-4cb6-8f91-13f850766109.png
+
+    // Helpers
+    function fillDemo(){
+      const u = document.querySelector('#loginForm input[name=username]');
+      const p = document.querySelector('#loginForm input[name=password]');
+      if(u) u.value='demo';
+      if(p) p.value='password';
+      if(p) p.focus();
+    }
+    function alertInfo(){
+      alert('Run backend (python app.py) and open http://127.0.0.1:8000/ to enable full features.');
+    }
+
+    // Fetch expenses and render table + sidebar
+    async function fetchExpensesAndRender(){
+      try{
+        const res = await fetch('/expenses', { credentials: 'same-origin' });
+        if(res.status === 401){ computeTotals(); return; } // not logged in
+        if(!res.ok) throw new Error('Network error: ' + res.status);
+        const rows = await res.json();
+
+        const tbody = document.getElementById('txnBody');
+        tbody.innerHTML = '';
+        let total = 0;
+        const catMap = {};
+
+        rows.forEach(r => {
+          const tr = document.createElement('tr');
+          const tdDate = document.createElement('td'); tdDate.textContent = r.date || '';
+          const tdCat = document.createElement('td'); tdCat.textContent = r.category || '—';
+          const tdNote = document.createElement('td'); tdNote.textContent = r.note || '';
+          const tdAmt = document.createElement('td'); tdAmt.className='right'; tdAmt.textContent = '₹' + Number(r.amount||0).toFixed(2);
+          tr.appendChild(tdDate); tr.appendChild(tdCat); tr.appendChild(tdNote); tr.appendChild(tdAmt);
+          tbody.appendChild(tr);
+
+          const num = parseFloat(r.amount)||0;
+          total += num;
+          if(r.category) catMap[r.category] = (catMap[r.category]||0) + num;
+        });
+
+        document.getElementById('monthlyTotal').textContent = total.toFixed(2);
+
+        const topCatsEl = document.getElementById('topCats');
+        topCatsEl.innerHTML = '';
+        const sorted = Object.entries(catMap).sort((a,b)=>b[1]-a[1]);
+        if(sorted.length===0){
+          topCatsEl.innerHTML = '<div class="empty">No categories yet</div>';
+        } else {
+          sorted.forEach(([name,amt])=>{
+            const div = document.createElement('div'); div.className='stat-item';
+            div.innerHTML = `<div>${name}</div><div class="muted">₹${Number(amt).toFixed(2)}</div>`;
+            topCatsEl.appendChild(div);
+          });
+        }
+        document.getElementById('topCount').textContent = sorted.length;
+      } catch(err){
+        console.error(err);
+        computeTotals(); // fallback to static rows
+      }
+    }
+
+    // compute totals from static rows if backend not available
+    function computeTotals(){
+      const tbody = document.getElementById('txnBody');
+      if(!tbody) return;
+      let total=0; const cats=new Set();
+      tbody.querySelectorAll('tr').forEach(r=>{
+        const last = r.cells[r.cells.length-1].textContent.trim().replace(/[^0-9.-]/g,'');
+        const n = parseFloat(last)||0; total += n;
+        cats.add(r.cells[1].textContent.trim());
+      });
+      document.getElementById('monthlyTotal').textContent = total.toFixed(2);
+      document.getElementById('topCount').textContent = cats.size;
+    }
+
+    // Submit add expense form via AJAX
+    async function submitAddExpense(e){
+      e.preventDefault();
+      const form = e.target;
+      const fd = new FormData(form);
+      const body = new URLSearchParams();
+      for(const pair of fd.entries()) body.append(pair[0], pair[1]);
+
+      try{
+        const res = await fetch('/add_expense', {
+          method:'POST',
+          headers:{'Content-Type':'application/x-www-form-urlencoded'},
+          body: body.toString(),
+          credentials: 'same-origin'
+        });
+        if(res.redirected){
+          // backend usually redirects on success; re-fetch after short delay
+          setTimeout(fetchExpensesAndRender, 300);
+        } else if(res.ok){
+          fetchExpensesAndRender();
+        } else {
+          alert('Failed to add expense');
+        }
+        form.reset();
+      } catch(err){
+        console.error(err);
+        alert('Network error while adding expense');
+      }
+    }
+
+    // run on load
+    window.addEventListener('load', () => {
+      // If backend available, fetch real expenses
+      fetchExpensesAndRender();
+    });
+  </script>
+</body>
+</html>
